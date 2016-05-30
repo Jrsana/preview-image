@@ -1,0 +1,46 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <title></title>
+</head>
+
+<body>
+ 
+   
+    <script>
+		   window.addEventListener("load", function () {
+		   
+				var input = document.getElementById("loadImage"),
+					preview  = document.getElementById("preview");
+					input.addEventListener("change", previewImage);
+					
+				function previewImage(e){
+					var reader = new FileReader(),
+					files = event.target.files[0];
+
+					reader.onloadend = (function(theFile) {
+						return function(e) {
+
+						e.target.result;
+						preview.src = reader.result;
+
+						};
+					})(files);
+
+					if(files){
+						reader.readAsDataURL(files);
+					}else{
+						preview.src = "";
+					}
+				};
+		
+		   });
+    </script>
+	
+	 <input type="file" name="pic" id="loadImage" accept="image/*">
+	 <img src="" height="200" id="preview" alt="Image preview...">
+</body>
+
+</html>
