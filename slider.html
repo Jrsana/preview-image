@@ -1,0 +1,159 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <title></title>
+</head>
+
+<body>
+    <style>
+    .slide,
+    .slider-list,
+    .img-slide {
+        display: table;
+        margin: 0 auto;
+        position: relative;
+    }
+    
+    .img-slide img {
+        width: 300px;
+        height: 300px
+    }
+    
+    .slider-list img {
+        width: 200px;
+        height: 200px;
+        margin: 5px;
+    }
+    
+    .-active {
+        opacity: .5
+    }
+    
+    .outer {
+        overflow: hidden;
+    }
+    </style>
+    <div class="slide">
+        <div class="img-slide">
+        </div>
+        <div class="outer">
+            <div class="slider-list">
+                <img src="./images/1.jpg" alt="">
+                <img src="./images/2.jpg" alt="">
+                <img src="./images/3.jpg" alt="">
+                <img src="./images/4.jpg" alt="">
+                <img src="./images/5.jpg" alt="">
+                <img src="./images/6.jpg" alt="">
+                <img src="./images/7.jpg" alt="">
+				<img src="./images/8.jpg" alt="">
+            </div>
+        </div>
+        <button class="next">NEXT</button>
+    </div>
+    <script>
+	
+	function Slider(){
+	  var sliderList = document.querySelector('.slider-list'),
+            containerImg = document.querySelector('.img-slide'),
+            sliderOuter = document.querySelector('.outer'),
+            next = document.querySelector('.next'),
+            count = sliderList.children.length,
+            width = parseInt(window.getComputedStyle(sliderList.firstElementChild).getPropertyValue('width')),
+            len = 4,
+            activeClass = '-active',
+            viewportClass = '-viewport';
+			
+		this.sliderList = sliderList;
+		this.containerImg = containerImg;
+		this.sliderOuter =  sliderOuter;
+		this.next = next;
+		this.count = count;
+		this.width = width;
+		this.len = len;
+		this.activeClass = activeClass;
+		this.viewportClass = viewportClass;
+		
+		this.firstElementInit(this.sliderList, this.containerImg, this.activeClass);
+		this.cssGenerator('width', (this.width + 10) * this.count, this.sliderList);
+        this.cssGenerator('width', (this.width + 10) * this.len, this.sliderOuter);
+        this.addViewport(this.sliderList, this.len, this.viewportClass);
+        this.addListener(this.sliderList, this.next);
+		
+
+
+	}
+	
+	Slider.prototype.cssGenerator = function(props, val, el){
+		el.style.cssText += props + ':' + (val) + 'px';
+	}
+	
+	
+	Slider.prototype.addViewport = function() {
+            for (var i = 0; i < this.sliderList.children.length; i++) {
+                if (i < this.len) {
+                    this.sliderList.children[i].classList.add(this.viewportClass);
+                }
+            }
+        }
+	
+	Slider.prototype.addListener = function() {
+            this.sliderList.addEventListener('click', this.handler);
+            this.next.addEventListener('click', this.handlerToClick);
+        }
+	
+	
+    Slider.prototype.firstElementInit = function() {
+            var first = this.sliderList.firstElementChild,
+                src = first.src ? first.src : "";
+            this.containerImg.insertAdjacentHTML('afterBegin', '<img src="' + src + '" />');
+            first.classList.add(this.activeClass);
+        }
+	
+	 Slider.prototype.handlerToClick = function() {
+	  
+            var active = document.querySelector('.' + newSlider.activeClass);
+			
+	
+            if (active.nextElementSibling && active.nextElementSibling.classList.contains(newSlider.viewportClass)) {
+             	  
+				newSlider.handler(null, active.nextElementSibling);
+
+				
+            } else {
+
+		
+                active.nextElementSibling.classList.add(newSlider.viewportClass);
+                newSlider.cssGenerator('left', (-(newSlider.width + 10)), newSlider.sliderList);
+                newSlider.sliderList.firstElementChild.classList.remove(newSlider.viewportClass);
+                newSlider.sliderList.appendChild(newSlider.sliderList.firstElementChild);
+                newSlider.handler(null, active.nextElementSibling);
+                newSlider.cssGenerator('left', (0),newSlider.sliderList);
+				
+            }
+    }
+		
+	Slider.prototype.removeClass = function() {
+            var active = document.querySelector('.' + this.activeClass);
+            active.classList.remove(this.activeClass);
+     }
+		
+	Slider.prototype.handler = function(event, elem) {
+            var target = event && event.target ? event.target : elem;
+                src = target.src ? target.src : "";
+
+            newSlider.removeClass();
+            newSlider.containerImg.firstElementChild.src = src;
+            target.classList.add(newSlider.activeClass);
+    }
+
+
+		
+	var newSlider = new Slider();
+
+
+   </script>
+</body>
+
+</html>
