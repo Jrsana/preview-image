@@ -22,14 +22,25 @@
 			
 		}
 
-		function findClass(someClass, findValue{
-			//console.log(someClass);
-			if(callback()){
-				 callback(someClass); 
-			}
-		}
 
-		findClass();
+		function findClass(params){
+            var fieldName = params.fieldName;
+            var object = params.object;
+            var callback = params.callback;
+
+            if (fieldName in object) {
+                callback(object[fieldName]);
+            }
+            for (var field in object) {
+                if (typeof(object[field]) === "object") {
+                    findClass({fieldName: fieldName, object: object[field], callback: callback});
+                }
+            }
+
+
+        }
+
+        findClass({fieldName: 'seven', object: someClass, callback: function(param){console.log('value is:', param);}});
 		
     </script>
 </body>
